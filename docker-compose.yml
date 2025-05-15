@@ -56,20 +56,20 @@ services:
       - production_redis_data:/data
 
 
-  celeryworker:
-    <<: *django
-    image: financeapp_production_celeryworker
-    command: /start-celeryworker
+  # celeryworker:
+  #   <<: *django
+  #   image: financeapp_production_celeryworker
+  #   command: /start-celeryworker
 
-  celerybeat:
-    <<: *django
-    image: financeapp_production_celerybeat
-    command: /start-celerybeat
+  # celerybeat:
+  #   <<: *django
+  #   image: financeapp_production_celerybeat
+  #   command: /start-celerybeat
 
-  flower:
-    <<: *django
-    image: financeapp_production_flower
-    command: /start-flower
+  # flower:
+  #   <<: *django
+  #   image: financeapp_production_flower
+  #   command: /start-flower
 
   # awscli:
   #   build:
