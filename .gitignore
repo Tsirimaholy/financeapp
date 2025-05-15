@@ -330,6 +330,7 @@ financeapp/media/
 .env
 .envs/*
 !.envs/.local/
+!.envs/.production/
 
 # Elastic Beanstalk Files
 .elasticbeanstalk/*
