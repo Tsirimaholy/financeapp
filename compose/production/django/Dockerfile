@@ -96,3 +96,4 @@ RUN DATABASE_URL="" \
   python manage.py compilemessages
 
 # ENTRYPOINT ["/entrypoint"]
+RUN python manage.py migrate --noinput
