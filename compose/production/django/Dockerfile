@@ -95,4 +95,5 @@ RUN DATABASE_URL="" \
   DJANGO_SETTINGS_MODULE="config.settings.test" \
   python manage.py compilemessages
 
+EXPOSE 5000
 # ENTRYPOINT ["/entrypoint"]
