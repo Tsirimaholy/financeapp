@@ -5,11 +5,11 @@ entryPoints:
   web:
     # http
     address: ':80'
-    http:
-      # https://doc.traefik.io/traefik/routing/entrypoints/#entrypoint
-      redirections:
-        entryPoint:
-          to: web-secure
+    # http:
+    #   # https://doc.traefik.io/traefik/routing/entrypoints/#entrypoint
+    #   redirections:
+    #     entryPoint:
+    #       to: web-secure
 
   web-secure:
     # https
@@ -33,13 +33,13 @@ http:
     web-secure-router:
       rule: 'Host(`financeapp-dev.eba-ppdmyppi.us-east-1.elasticbeanstalk.com`) || Host(`www.financeapp-dev.eba-ppdmyppi.us-east-1.elasticbeanstalk.com`)'
       entryPoints:
-        - web-secure
+        - web
       middlewares:
         - csrf
       service: django
-      tls:
-        # https://doc.traefik.io/traefik/routing/routers/#certresolver
-        certResolver: letsencrypt
+      # tls:
+      #   # https://doc.traefik.io/traefik/routing/routers/#certresolver
+      #   certResolver: letsencrypt
 
     flower-secure-router:
       rule: 'Host(`financeapp-dev.eba-ppdmyppi.us-east-1.elasticbeanstalk.com`)'
