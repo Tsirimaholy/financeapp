@@ -4,12 +4,20 @@ set -o errexit
 set -o pipefail
 set -o nounset
 
-if [ -z "${POSTGRES_USER}" ]; then
-    base_postgres_image_default_user='postgres'
-    export POSTGRES_USER="${base_postgres_image_default_user}"
+if [ -n "${DATABASE_URL:-}" ]; then
+    # Extract host and port from DATABASE_URL when it's provided
+    POSTGRES_HOST=$(echo "${DATABASE_URL}" | sed -E 's/.*@([^:]+):.*/\1/')
+    POSTGRES_PORT=$(echo "${DATABASE_URL}" | sed -E 's/.*:([0-9]+)\/.*/\1/')
+else
+    # If DATABASE_URL is not provided, construct it from components
+    if [ -z "${POSTGRES_USER:-}" ]; then
+        base_postgres_image_default_user='postgres'
+        export POSTGRES_USER="${base_postgres_image_default_user}"
+    fi
+    export DATABASE_URL="postgres://${POSTGRES_USER}:${POSTGRES_PASSWORD}@${POSTGRES_HOST}:${POSTGRES_PORT}/${POSTGRES_DB}"
 fi
-export DATABASE_URL="postgres://${POSTGRES_USER}:${POSTGRES_PASSWORD}@${POSTGRES_HOST}:${POSTGRES_PORT}/${POSTGRES_DB}"
 
+# Wait for database to be ready
 wait-for-it "${POSTGRES_HOST}:${POSTGRES_PORT}" -t 30
 
 >&2 echo 'PostgreSQL is available'
