@@ -4,7 +4,7 @@ set -o errexit
 set -o pipefail
 set -o nounset
 
-
+export DATABASE_URL=${DATABASE_URL}
 python /app/manage.py collectstatic --noinput
 python /app/manage.py migrate --noinput
 
