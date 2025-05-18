@@ -14,9 +14,9 @@ services:
       dockerfile: ./compose/production/django/Dockerfile
 
     image: financeapp_production_django
-    depends_on:
+    # depends_on:
       # - postgres
-      - redis
+      # - redis
     environment:
       DATABASE_URL: ${DATABASE_URL}
       DJANGO_AWS_ACCESS_KEY_ID: ${AWS_ACCESS_KEY_ID}
