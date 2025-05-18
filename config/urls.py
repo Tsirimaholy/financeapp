@@ -1,4 +1,5 @@
 from django.conf import settings
+from django.http import HttpResponse
 from django.conf.urls.static import static
 from django.contrib import admin
 from django.contrib.staticfiles.urls import staticfiles_urlpatterns
@@ -10,7 +11,11 @@ from drf_spectacular.views import SpectacularAPIView
 from drf_spectacular.views import SpectacularSwaggerView
 from rest_framework.authtoken.views import obtain_auth_token
 
+def health_check(request):
+    return HttpResponse("OK")
+
 urlpatterns = [
+    path("ping/", health_check),
     path("", TemplateView.as_view(template_name="pages/home.html"), name="home"),
     path(
         "about/",
