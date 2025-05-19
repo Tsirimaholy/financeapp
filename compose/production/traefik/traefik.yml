@@ -31,7 +31,7 @@ certificatesResolvers:
 http:
   routers:
     web-secure-router:
-      rule: 'Host(`financeapp-dev.eba-ppdmyppi.us-east-1.elasticbeanstalk.com`) || Host(`www.financeapp-dev.eba-ppdmyppi.us-east-1.elasticbeanstalk.com`)'
+      rule: 'Host(`finance-app-dev.eba-7bpd9mqa.us-east-1.elasticbeanstalk.com`) || Host(`www.finance-app-dev.eba-7bpd9mqa.us-east-1.elasticbeanstalk.com`)'
       entryPoints:
         - web
       middlewares:
@@ -42,7 +42,7 @@ http:
       #   certResolver: letsencrypt
 
     flower-secure-router:
-      rule: 'Host(`financeapp-dev.eba-ppdmyppi.us-east-1.elasticbeanstalk.com`)'
+      rule: 'Host(`finance-app-dev.eba-7bpd9mqa.us-east-1.elasticbeanstalk.com`)'
       entryPoints:
         - flower
       service: flower
