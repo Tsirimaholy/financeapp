@@ -14,7 +14,12 @@ from rest_framework.authtoken.views import obtain_auth_token
 def health_check(request):
     return HttpResponse("OK")
 
+def trigger_error(request):
+    division_by_zero = 1 / 0
+
+
 urlpatterns = [
+    path('sentry-debug/', trigger_error),
     path("ping/", health_check),
     path("", TemplateView.as_view(template_name="pages/home.html"), name="home"),
     path(
