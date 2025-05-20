@@ -6,7 +6,6 @@ volumes:
   production_redis_data: {}
 
 
-
 services:
   django: &django
     build:
