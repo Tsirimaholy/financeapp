@@ -30,6 +30,11 @@ certificatesResolvers:
 
 http:
   routers:
+    healthcheck:
+      rule: Path(`/ping/`)
+      entryPoints:
+        - web
+      service: django
     web-secure-router:
       rule: 'Host(`finance-app-dev.eba-7bpd9mqa.us-east-1.elasticbeanstalk.com`) || Host(`www.finance-app-dev.eba-7bpd9mqa.us-east-1.elasticbeanstalk.com`)'
       entryPoints:
