@@ -1,15 +1,11 @@
 from http import HTTPStatus
 
 import pytest
-from django.conf import settings
 from django.contrib import messages
-from django.contrib.auth.models import AnonymousUser
 from django.contrib.messages.middleware import MessageMiddleware
 from django.contrib.sessions.middleware import SessionMiddleware
 from django.http import HttpRequest
-from django.http import HttpResponseRedirect
 from django.test import RequestFactory
-from django.urls import reverse
 from django.utils.translation import gettext_lazy as _
 
 from financeapp.users.forms import UserAdminChangeForm
@@ -92,11 +88,3 @@ class TestUserDetailView:
 
     def test_not_authenticated(self, user: User, rf: RequestFactory):
         pass
-        # request = rf.get("/fake-url/")
-        # request.user = AnonymousUser()
-        # response = user_detail_view(request, pk=user.pk)
-        # login_url = reverse(settings.LOGIN_URL)
-
-        # assert isinstance(response, HttpResponseRedirect)
-        # assert response.status_code == HTTPStatus.FOUND
-        # assert response.url == f"{login_url}?next=/fake-url/"

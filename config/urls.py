@@ -1,8 +1,10 @@
+import logging
+
 from django.conf import settings
-from django.http import HttpResponse
 from django.conf.urls.static import static
 from django.contrib import admin
 from django.contrib.staticfiles.urls import staticfiles_urlpatterns
+from django.http import HttpResponse
 from django.urls import include
 from django.urls import path
 from django.views import defaults as default_views
@@ -11,15 +13,20 @@ from drf_spectacular.views import SpectacularAPIView
 from drf_spectacular.views import SpectacularSwaggerView
 from rest_framework.authtoken.views import obtain_auth_token
 
+logger = logging.getLogger(__name__)
+
+
 def health_check(request):
     return HttpResponse("OK")
 
+
 def trigger_error(request):
-    division_by_zero = 1 / 0
+    logger.error(1 / 0)
+    return HttpResponse("Error triggered")
 
 
 urlpatterns = [
-    path('sentry-debug/', trigger_error),
+    path("sentry-debug/", trigger_error),
     path("ping/", health_check),
     path("", TemplateView.as_view(template_name="pages/home.html"), name="home"),
     path(
