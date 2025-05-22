@@ -1,0 +1,46 @@
+name: Deploy Django to AWS Elastic Beanstalk (Docker)
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  deploy:
+    name: Deploy to Elastic Beanstalk
+    runs-on: ubuntu-latest
+
+    env:
+      AWS_REGION: ${{ secrets.AWS_REGION }}
+      EB_ENV_NAME: ${{ secrets.EB_ENV_NAME }}
+      EB_APP_NAME: ${{ secrets.EB_APP_NAME }}
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: 3.12
+
+      - name: Install EB CLI
+        run: |
+          pip install --upgrade pip
+          pip install awsebcli
+
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v2
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: ${{ secrets.AWS_REGION }}
+
+      - name: Initialize EB CLI
+        run: |
+          eb init $EB_APP_NAME --region $AWS_REGION --platform docker
+
+      - name: Deploy to Elastic Beanstalk
+        run: |
+          eb use $EB_ENV_NAME
+          eb deploy --staged
