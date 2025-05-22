@@ -6,6 +6,17 @@ env:
   COMPOSE_DOCKER_CLI_BUILD: 1
 
 on:
+  workflow_dispatch:
+    inputs:
+      branch:
+        description: 'Branch to deploy'
+        required: true
+        default: 'dev'
+        type: choice
+        options:
+          - dev
+          - main
+          - preprod
   pull_request:
     branches: ['main', 'dev', 'preprod']
     paths-ignore: ['docs/**']

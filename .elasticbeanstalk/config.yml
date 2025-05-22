@@ -1,0 +1,19 @@
+branch-defaults:
+  main:
+    environment: financeapp-prod
+  dev:
+    environment: financeapp-dev
+  preprod:
+    environment: financeapp-preprod
+global:
+  application_name: finance-app
+  branch: null
+  default_ec2_keyname: null
+  default_platform: Docker
+  include_git_submodules: true
+  instance_profile: null
+  platform_name: null
+  platform_version: null
+  repository: null
+  sc: git
+  workspace_type: Application
