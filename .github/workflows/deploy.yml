@@ -15,9 +15,9 @@ jobs:
     env:
       AWS_REGION: ${{ secrets.AWS_REGION }}
       EB_APP_NAME: ${{ secrets.EB_APP_NAME }}
-      EB_DEV_ENV_NAME: ${{ secrets.EB_DEV_ENV_NAME }}
-      EB_PREPROD_ENV_NAME: ${{ secrets.EB_PREPROD_ENV_NAME }}
-      EB_PROD_ENV_NAME: ${{ secrets.EB_PROD_ENV_NAME }}
+      EB_DEV_ENV_NAME: ${{ vars.EB_DEV_ENV_NAME }}
+      EB_PREPROD_ENV_NAME: ${{ vars.EB_PREPROD_ENV_NAME }}
+      EB_PROD_ENV_NAME: ${{ vars.EB_PROD_ENV_NAME }}
 
     steps:
       - name: Checkout code
