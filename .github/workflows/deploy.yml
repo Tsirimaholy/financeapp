@@ -6,6 +6,17 @@ on:
     workflows: ["CI"]
     types:
       - completed
+  workflow_dispatch:
+    inputs:
+      branch:
+        description: 'Branch to deploy'
+        required: true
+        default: 'dev'
+        type: choice
+        options:
+          - dev
+          - main
+          - preprod
 
 jobs:
   deploy:
@@ -63,4 +74,4 @@ jobs:
         run: |
           eb use $EB_ENV_NAME
           echo "Deploying to environment: $EB_ENV_NAME"
-          eb deploy
+          eb deploy --staged
