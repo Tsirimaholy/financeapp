@@ -86,8 +86,8 @@ _AWS_EXPIRY = 60 * 60 * 24 * 7
 AWS_S3_OBJECT_PARAMETERS = {
     "CacheControl": f"max-age={_AWS_EXPIRY}, s-maxage={_AWS_EXPIRY}, must-revalidate",
 }
-# Set default ACL to public-read to make static files publicly accessible
-AWS_DEFAULT_ACL = "public-read"
+# Don't set a global default ACL - we'll configure it per storage
+# AWS_DEFAULT_ACL = "public-read"
 # https://django-storages.readthedocs.io/en/latest/backends/amazon-S3.html#settings
 AWS_S3_MAX_MEMORY_SIZE = env.int(
     "DJANGO_AWS_S3_MAX_MEMORY_SIZE",
@@ -106,12 +106,21 @@ STORAGES = {
         "OPTIONS": {
             "location": "media",
             "file_overwrite": False,
+            # Don't set ACL for media files - rely on bucket policy for access control
+            # This ensures media files are not publicly accessible by default
+            "object_parameters": {
+                "ACL": "private",
+            },
         },
     },
     "staticfiles": {
         "BACKEND": "storages.backends.s3.S3Storage",
         "OPTIONS": {
             "location": "static",
+            # Make static files publicly readable
+            "object_parameters": {
+                "ACL": "public-read",
+            },
         },
     },
 }
