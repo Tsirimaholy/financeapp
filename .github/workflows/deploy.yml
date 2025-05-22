@@ -1,28 +1,32 @@
-name: Deploy Django to AWS Elastic Beanstalk (Docker)
+name: Deploy Django Docker App to Elastic Beanstalk
 
 on:
-  push:
-    branches:
-      - main
+  workflow_run:
+    workflows: ["CI"]
+    types:
+      - completed
 
 jobs:
   deploy:
+    if: ${{ github.event.workflow_run.conclusion == 'success' }}
     name: Deploy to Elastic Beanstalk
     runs-on: ubuntu-latest
 
     env:
       AWS_REGION: ${{ secrets.AWS_REGION }}
-      EB_ENV_NAME: ${{ secrets.EB_ENV_NAME }}
       EB_APP_NAME: ${{ secrets.EB_APP_NAME }}
+      EB_DEV_ENV_NAME: ${{ secrets.EB_DEV_ENV_NAME }}
+      EB_PREPROD_ENV_NAME: ${{ secrets.EB_PREPROD_ENV_NAME }}
+      EB_PROD_ENV_NAME: ${{ secrets.EB_PROD_ENV_NAME }}
 
     steps:
       - name: Checkout code
-        uses: actions/checkout@v4
+        uses: actions/checkout@v3
 
       - name: Set up Python
-        uses: actions/setup-python@v5
+        uses: actions/setup-python@v4
         with:
-          python-version: 3.12
+          python-version: 3.11
 
       - name: Install EB CLI
         run: |
@@ -36,6 +40,20 @@ jobs:
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           aws-region: ${{ secrets.AWS_REGION }}
 
+      - name: Set environment based on branch
+        id: env
+        run: |
+          if [ "${{ github.event.workflow_run.head_branch }}" == "dev" ]; then
+            echo "EB_ENV_NAME=${{ env.EB_DEV_ENV_NAME }}" >> $GITHUB_ENV
+          elif [ "${{ github.event.workflow_run.head_branch }}" == "preprod" ]; then
+            echo "EB_ENV_NAME=${{ env.EB_PREPROD_ENV_NAME }}" >> $GITHUB_ENV
+          elif [ "${{ github.event.workflow_run.head_branch }}" == "main" ]; then
+            echo "EB_ENV_NAME=${{ env.EB_PREPROD_ENV_NAME }}" >> $GITHUB_ENV
+          else
+            echo "Unknown branch; skipping deployment"
+            exit 1
+          fi
+
       - name: Initialize EB CLI
         run: |
           eb init $EB_APP_NAME --region $AWS_REGION --platform docker
@@ -43,4 +61,5 @@ jobs:
       - name: Deploy to Elastic Beanstalk
         run: |
           eb use $EB_ENV_NAME
+          echo "Deploying to environment: $EB_ENV_NAME"
           eb deploy --staged
