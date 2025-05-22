@@ -36,6 +36,8 @@ http:
         - web
       service: django
     web-secure-router:
+      rule: "PathPrefix(`/`)"
+
       entryPoints:
         - web
       middlewares:
