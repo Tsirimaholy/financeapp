@@ -18,15 +18,15 @@ entryPoints:
   flower:
     address: ':5555'
 
-certificatesResolvers:
-  letsencrypt:
-    # https://doc.traefik.io/traefik/https/acme/#lets-encrypt
-    acme:
-      email: 'tsirimaholy.h@gmail.com'
-      storage: /etc/traefik/acme/acme.json
-      # https://doc.traefik.io/traefik/https/acme/#httpchallenge
-      httpChallenge:
-        entryPoint: web
+#certificatesResolvers:
+#  letsencrypt:
+#    # https://doc.traefik.io/traefik/https/acme/#lets-encrypt
+#    acme:
+#      email: 'tsirimaholy.h@gmail.com'
+#      storage: /etc/traefik/acme/acme.json
+#      # https://doc.traefik.io/traefik/https/acme/#httpchallenge
+#      httpChallenge:
+#        entryPoint: web
 
 http:
   routers:
@@ -36,7 +36,7 @@ http:
         - web
       service: django
     web-secure-router:
-      rule: 'Host(`financeapp-dev.eba-7bpd9mqa.us-east-1.elasticbeanstalk.com`) || Host(`www.financeapp-dev.eba-7bpd9mqa.us-east-1.elasticbeanstalk.com`)'
+      rule: 'Host(`*`)'
       entryPoints:
         - web
       middlewares:
@@ -47,7 +47,7 @@ http:
       #   certResolver: letsencrypt
 
     flower-secure-router:
-      rule: 'Host(`financeapp-dev.eba-7bpd9mqa.us-east-1.elasticbeanstalk.com`)'
+      rule: 'Host(`*`)'
       entryPoints:
         - flower
       service: flower
