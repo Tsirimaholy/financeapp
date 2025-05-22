@@ -22,12 +22,12 @@ jobs:
 
     steps:
       - name: Checkout code
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
       - name: Set up Python
-        uses: actions/setup-python@v4
+        uses: actions/setup-python@v5
         with:
-          python-version: 3.11
+          python-version: 3.12
 
       - name: Install EB CLI
         run: |
@@ -35,7 +35,7 @@ jobs:
           pip install awsebcli
 
       - name: Configure AWS credentials
-        uses: aws-actions/configure-aws-credentials@v2
+        uses: aws-actions/configure-aws-credentials@v4
         with:
           aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
@@ -49,7 +49,7 @@ jobs:
           elif [ "${{ github.event.workflow_run.head_branch }}" == "preprod" ]; then
             echo "EB_ENV_NAME=${{ env.EB_PREPROD_ENV_NAME }}" >> $GITHUB_ENV
           elif [ "${{ github.event.workflow_run.head_branch }}" == "main" ]; then
-            echo "EB_ENV_NAME=${{ env.EB_PREPROD_ENV_NAME }}" >> $GITHUB_ENV
+            echo "EB_ENV_NAME=${{ env.EB_PROD_ENV_NAME }}" >> $GITHUB_ENV
           else
             echo "Unknown branch; skipping deployment"
             exit 1
