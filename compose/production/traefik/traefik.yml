@@ -18,44 +18,42 @@ entryPoints:
   flower:
     address: ':5555'
 
-certificatesResolvers:
-  letsencrypt:
-    # https://doc.traefik.io/traefik/https/acme/#lets-encrypt
-    acme:
-      email: 'tsirimaholy.h@gmail.com'
-      storage: /etc/traefik/acme/acme.json
-      # https://doc.traefik.io/traefik/https/acme/#httpchallenge
-      httpChallenge:
-        entryPoint: web
+# certificatesResolvers:
+#   letsencrypt:
+#     # https://doc.traefik.io/traefik/https/acme/#lets-encrypt
+#     acme:
+#       email: 'tsirimaholy.h@gmail.com'
+#       storage: /etc/traefik/acme/acme.json
+#       # https://doc.traefik.io/traefik/https/acme/#httpchallenge
+#       httpChallenge:
+#         entryPoint: web
 
 http:
   routers:
     healthcheck:
-      rule: "Host(`financeapp-dev.eba-7bpd9mqa.us-east-1.elasticbeanstalk.com`) && Path(`/ping/`)"
+      rule: "Path(`/ping/`)"
       entryPoints:
         - web
       service: django
-      tls:
-        certResolver: letsencrypt
     web-secure-router:
-      rule: "Host(`financeapp-dev.eba-7bpd9mqa.us-east-1.elasticbeanstalk.com`) && PathPrefix(`/`)"
+      rule: "PathPrefix(`/`)"
       entryPoints:
-        - web-secure
+        - web
       middlewares:
         - csrf
       service: django
-      tls:
+      # tls:
         # https://doc.traefik.io/traefik/routing/routers/#certresolver
-        certResolver: letsencrypt
+        # certResolver: letsencrypt
 
     flower-secure-router:
       rule: "Host(`financeapp-dev.eba-7bpd9mqa.us-east-1.elasticbeanstalk.com`) && PathPrefix(`/flower/`)"
       entryPoints:
-        - web-secure
+        - flower
       service: flower
-      tls:
-        # https://doc.traefik.io/traefik/master/routing/routers/#certresolver
-        certResolver: letsencrypt
+      # tls:
+      #   # https://doc.traefik.io/traefik/master/routing/routers/#certresolver
+      #   certResolver: letsencrypt
 
   middlewares:
     csrf:
