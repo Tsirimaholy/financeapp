@@ -36,7 +36,8 @@ http:
         - web
       service: django
     web-secure-router:
-      rule: "HostRegexp(`{host:.+}`)"
+      rule: "HostRegexp(`{host:.+}`) && PathPrefix(`/`)"
+
       entryPoints:
         - web
       middlewares:
