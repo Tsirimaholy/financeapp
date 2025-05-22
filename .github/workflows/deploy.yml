@@ -34,6 +34,8 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.workflow_run.head_branch || github.event.inputs.branch }}
 
       - name: Set up Python
         uses: actions/setup-python@v5
@@ -72,6 +74,8 @@ jobs:
 
       - name: Deploy to Elastic Beanstalk
         run: |
+          git log | head
+          git status
           cat .github/workflows/deploy.yml
           eb use $EB_ENV_NAME
           echo "Deploying to environment: $EB_ENV_NAME"
