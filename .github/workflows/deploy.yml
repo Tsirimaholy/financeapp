@@ -77,6 +77,7 @@ jobs:
           git log | head
           git status
           cat .github/workflows/deploy.yml
+          cat .elasticbeanstalk/config.yml
           eb use $EB_ENV_NAME
           echo "Deploying to environment: $EB_ENV_NAME"
           eb deploy
