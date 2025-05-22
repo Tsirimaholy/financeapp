@@ -31,15 +31,14 @@ certificatesResolvers:
 http:
   routers:
     healthcheck:
-      rule: Path(`/ping/`)
+      rule: "Host(`financeapp-dev.eba-7bpd9mqa.us-east-1.elasticbeanstalk.com`) && Path(`/ping/`)"
       entryPoints:
         - web-secure
       service: django
       tls:
         certResolver: letsencrypt
     web-secure-router:
-      rule: "PathPrefix(`/`)"
-
+      rule: "Host(`financeapp-dev.eba-7bpd9mqa.us-east-1.elasticbeanstalk.com`) && PathPrefix(`/`)"
       entryPoints:
         - web-secure
       middlewares:
@@ -50,8 +49,9 @@ http:
         certResolver: letsencrypt
 
     flower-secure-router:
+      rule: "Host(`financeapp-dev.eba-7bpd9mqa.us-east-1.elasticbeanstalk.com`) && PathPrefix(`/flower/`)"
       entryPoints:
-        - flower
+        - web-secure
       service: flower
       tls:
         # https://doc.traefik.io/traefik/master/routing/routers/#certresolver
