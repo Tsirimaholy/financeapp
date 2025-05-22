@@ -63,4 +63,4 @@ jobs:
         run: |
           eb use $EB_ENV_NAME
           echo "Deploying to environment: $EB_ENV_NAME"
-          eb deploy --staged
+          eb deploy
