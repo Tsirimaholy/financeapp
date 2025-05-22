@@ -5,11 +5,11 @@ entryPoints:
   web:
     # http
     address: ':80'
-    # http:
-    #   # https://doc.traefik.io/traefik/routing/entrypoints/#entrypoint
-    #   redirections:
-    #     entryPoint:
-    #       to: web-secure
+    http:
+      # https://doc.traefik.io/traefik/routing/entrypoints/#entrypoint
+      redirections:
+        entryPoint:
+          to: web-secure
 
   web-secure:
     # https
@@ -18,34 +18,36 @@ entryPoints:
   flower:
     address: ':5555'
 
-#certificatesResolvers:
-#  letsencrypt:
-#    # https://doc.traefik.io/traefik/https/acme/#lets-encrypt
-#    acme:
-#      email: 'tsirimaholy.h@gmail.com'
-#      storage: /etc/traefik/acme/acme.json
-#      # https://doc.traefik.io/traefik/https/acme/#httpchallenge
-#      httpChallenge:
-#        entryPoint: web
+certificatesResolvers:
+  letsencrypt:
+    # https://doc.traefik.io/traefik/https/acme/#lets-encrypt
+    acme:
+      email: 'tsirimaholy.h@gmail.com'
+      storage: /etc/traefik/acme/acme.json
+      # https://doc.traefik.io/traefik/https/acme/#httpchallenge
+      httpChallenge:
+        entryPoint: web
 
 http:
   routers:
     healthcheck:
       rule: Path(`/ping/`)
       entryPoints:
-        - web
+        - web-secure
       service: django
+      tls:
+        certResolver: letsencrypt
     web-secure-router:
       rule: "PathPrefix(`/`)"
 
       entryPoints:
-        - web
+        - web-secure
       middlewares:
         - csrf
       service: django
-      # tls:
-      #   # https://doc.traefik.io/traefik/routing/routers/#certresolver
-      #   certResolver: letsencrypt
+      tls:
+        # https://doc.traefik.io/traefik/routing/routers/#certresolver
+        certResolver: letsencrypt
 
     flower-secure-router:
       entryPoints:
@@ -61,6 +63,13 @@ http:
       # https://docs.djangoproject.com/en/dev/ref/csrf/#ajax
       headers:
         hostsProxyHeaders: ['X-CSRFToken']
+        sslRedirect: true
+        browserXssFilter: true
+        contentTypeNosniff: true
+        forceSTSHeader: true
+        stsIncludeSubdomains: true
+        stsPreload: true
+        stsSeconds: 31536000
 
   services:
     django:
